@@ -30,22 +30,23 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     cleaner_css: {
-      default_options: {
+      defaults: {
         options: {
         },
         files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
+          'tmp/defaults/css1.css': ['test/css/css1.css'],
+          'tmp/defaults/css2.css': ['test/css/css2.css'],
         }
       },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      }
+      // custom_options: {
+      //   options: {
+      //     separator: ': ',
+      //     punctuation: ' !!!'
+      //   },
+      //   files: {
+      //     'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
+      //   }
+      // }
     },
 
     // Unit tests.
