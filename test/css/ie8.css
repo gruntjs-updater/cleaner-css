@@ -1,0 +1,172 @@
+/* Scaffolding */
+.only-child,
+.content-main:only-child,
+.main:only-child {
+  width: 100%;
+  float: none;
+}
+.page-content-intro .main {
+  width: 100%;
+  float: none;
+}
+.article-image a:before,
+.article-image a:after {
+  display: none;
+}
+/* Header */
+.top-nav {
+  background-color: #493073;
+}
+.page-hero .marketing-message {
+  margin-top: -114px;
+}
+.marketing-message span {
+  display: block;
+}
+.megamenu-internal-wrapper p {
+  border-bottom: 1px solid #d1cade;
+}
+.hidden-desktop {
+  display: none;
+}
+.visible-desktop {
+  display: block;
+}
+.overlay {
+  background-color: #472979;
+}
+.overlay-content {
+  left: auto;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cta:before {
+  width: 12px;
+  height: 14px;
+  margin-top: -5px;
+}
+.page-hero-slider .cta:before {
+  top: 0;
+}
+.sidebar-list-secondary a:before {
+  width: 18px;
+  height: 18px;
+  top: 16px;
+}
+.sidebar-list-social i,
+.share i {
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+}
+.w-chevron:before {
+  width: 13px;
+  height: 13px;
+  margin-top: -6.5px;
+}
+.main-nav-breadcrumbs li:before {
+  top: 1px;
+  margin-left: -5px;
+}
+.calendar-item-content {
+  margin-top: -22px;
+  margin-left: -16.5px;
+}
+.calendar-item-large .calendar-item-content {
+  margin-left: -36px;
+  margin-top: -45px;
+}
+.dropdown .static:before {
+  margin-top: -15px;
+}
+.dropdown-table .static:before {
+  margin-top: -9px;
+}
+.chosen-single:before {
+  margin-top: -9px;
+}
+/* Homepage */
+.page-hero-slider {
+  background-color: #edeaf2;
+}
+.featured-image-wrapper figcaption {
+  background-color: #472979;
+  padding-right: 15px;
+}
+.featured-image-wrapper figcaption:before {
+  width: 17px;
+  height: 14px;
+  margin-top: -9px;
+  margin-left: -8.5px;
+  right: 10px;
+}
+.featured-image-wrapper:hover img {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  -webkit-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+}
+.bordered-left-right-navigation .nav-prev {
+  border-right: 1px solid #755f9b;
+}
+.chicago-experience-outer-wrapper {
+  background-color: #472979;
+}
+.index-post-box-links p {
+  top: auto;
+  position: relative;
+}
+/* Admitted Students */
+.live-chat-widget {
+  background-color: #ffffff;
+}
+.live-chat-trigger {
+  background-color: #a394bc;
+}
+.our-campus-content {
+  vertical-align: top;
+}
+/* Current Students */
+.services-header a {
+  background-color: #583D85;
+}
+/* Radio Buttons */
+.input-radio {
+  border: none;
+  background-image: url('../images/radio-unchecked.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.input-radio.checked {
+  background-image: url('../images/radio-checked.png');
+}
+.input-radio.checked:after {
+  display: none;
+}
+.input-radio.checked.disabled {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  -webkit-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+}
+/* Footer */
+.footer-map-marker {
+  background-color: #472979;
+  margin-top: -103.5px;
+  margin-left: -103.5px;
+}
+.footer-map-marker figcaption {
+  left: 0;
+  margin-top: -37px;
+}
+.footer-nav-column a {
+  border-bottom: 1px solid #222;
+}
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImJ1aWxkL2xlc3MvYnJvd3NlcnMvaWU4Lmxlc3MiLCJidWlsZC9sZXNzL3ZlbmRvci9sZXNzaGF0Lmxlc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUVBO0FBQ0EsYUFBYTtBQUNiLEtBQUs7RUFDSixXQUFBO0VBQ0EsV0FBQTs7QUFFRCxtQkFDQztFQUNDLFdBQUE7RUFDQSxXQUFBOztBQUtBLGNBREQsRUFDRTtBQUNELGNBRkQsRUFFRTtFQUNBLGFBQUE7OztBQU1IO0VBQ0MseUJBQUE7O0FBRUQsVUFDQztFQUNDLGtCQUFBOztBQUdGLGtCQUNDO0VBQ0MsY0FBQTs7QUFHRiwwQkFDQztFQUNDLGdDQUFBOztBQUlGO0VBQ0MsYUFBQTs7QUFFRDtFQUNDLGNBQUE7O0FBRUQ7RUFDQyx5QkFBQTs7QUFFRDtFQUNDLFVBQUE7RUFDQSxrQkFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7O0FBR0EsSUFBQztFQytwQkUsV0FBQTtFQUNBLFlBQUE7RUQ3cEJGLGdCQUFBOztBQUtBLGlCQURELEtBQ0U7RUFDQSxNQUFBOztBQU1ELHVCQURELEVBQ0U7RUNnbkJDLFdBQUE7RUFDQSxZQUFBO0VEL21CRCxTQUFBOztBQUlILG9CQUVDO0FBREQsTUFDQztFQ3dtQkcsV0FBQTtFQUNBLFlBQUE7RUR2bUJGLGtCQUFBO0VBQ0EsaUJBQUE7O0FBSUQsVUFBQztFQ2ltQkUsV0FBQTtFQUNBLFlBQUE7RURobUJGLGtCQUFBOztBQUtBLHFCQURELEdBQ0U7RUFDQSxRQUFBO0VBQ0EsaUJBQUE7O0FBSUg7RUFDQyxpQkFBQTtFQUNBLG9CQUFBOztBQUNBLG9CQUFxQjtFQUNwQixrQkFBQTtFQUNBLGlCQUFBOztBQUtBLFNBREQsUUFDRTtFQUNBLGlCQUFBOztBQU1ELGVBREQsUUFDRTtFQUNBLGdCQUFBOztBQUtGLGNBQUM7RUFDQSxnQkFBQTs7O0FBS0Y7RUFDQyx5QkFBQTs7QUFFRCx1QkFDQztFQUNDLHlCQUFBO0VBQ0EsbUJBQUE7O0FBQ0EsdUJBSEQsV0FHRTtFQ2dsQkMsV0FBQTtFQUNBLFlBQUE7RUQva0JELGdCQUFBO0VBQ0EsbUJBQUE7RUFDQSxXQUFBOztBQUdGLHVCQUFDLE1BQ0E7RUNtWEMsT0FBQTtFQUFTLHlCQUFBO0VBQ1Ysb0JBQUE7RUFDQSxpQkFBQTtFQUNBLFlBQUE7O0FEalhGLCtCQUNDO0VBQ0MsK0JBQUE7O0FBR0Y7RUFDQyx5QkFBQTs7QUFFRCxxQkFDQztFQUNDLFNBQUE7RUFDQSxrQkFBQTs7O0FBS0Y7RUFDQyx5QkFBQTs7QUFFRDtFQUNDLHlCQUFBOztBQUVEO0VBQ0MsbUJBQUE7OztBQUlELGdCQUNDO0VBQ0MseUJBQUE7OztBQUtGO0VBQ0MsWUFBQTtFQUNBLHNCQUFzQixnQ0FBdEI7RUFDQSwyQkFBQTtFQUNBLDRCQUFBO0VDaUhDLHdCQUFBO0VBQ0EscUJBQUE7RUFDQSxnQkFBQTs7QURqSEQsWUFBQztFQUNBLHNCQUFzQiw4QkFBdEI7O0FBQ0EsWUFGQSxRQUVDO0VBQ0EsYUFBQTs7QUFFRCxZQUxBLFFBS0M7RUNpVUEsT0FBQTtFQUFTLHlCQUFBO0VBQ1Ysb0JBQUE7RUFDQSxpQkFBQTtFQUNBLFlBQUE7OztBRDdURjtFQUNDLHlCQUFBO0VBQ0Esb0JBQUE7RUFDQSxxQkFBQTs7QUFIRCxrQkFJQztFQUNDLE9BQUE7RUFDQSxpQkFBQTs7QUFHRixrQkFDQztFQUNDLDZCQUFBIn0= */

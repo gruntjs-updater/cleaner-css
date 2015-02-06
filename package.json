@@ -1,7 +1,7 @@
 {
-  "name": "@nielse63/grunt-cleaner-css",
+  "name": "grunt-cleaner-css",
   "description": "Makes your clean CSS even cleaner",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "homepage": "https://github.com/nielse63/cleaner-css",
   "author": {
     "name": "Erik Nielsen",
@@ -40,6 +40,6 @@
     "gruntplugin"
   ],
   "dependencies": {
-    "grunt-csscomb": "^3.0.0"
+    "csscomb": "^3.0.4"
   }
 }

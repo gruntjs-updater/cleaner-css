@@ -34,8 +34,13 @@ module.exports = function(grunt) {
         options: {
         },
         files: {
-          'tmp/defaults/css1.css': ['test/css/css1.css'],
-          'tmp/defaults/css2.css': ['test/css/css2.css'],
+          'tmp/defaults/bootstrap.css': ['test/css/bootstrap.css'],
+          'tmp/defaults/ie8.css': ['test/css/ie8.css'],
+          'tmp/defaults/ie9.css': ['test/css/ie9.css'],
+          'tmp/defaults/jquery-ui.css': ['test/css/jquery-ui.css'],
+          'tmp/defaults/main.css': ['test/css/main.css'],
+          'tmp/defaults/mejs.css': ['test/css/mejs.css'],
+          'tmp/defaults/multiselect.css': ['test/css/multiselect.css']
         }
       }
     },
