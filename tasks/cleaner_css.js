@@ -10,135 +10,35 @@
 
 var path = require('path');
 var Comb = require('csscomb');
+var CleanCSS = require('clean-css');
 
 module.exports = function(grunt) {
 
-	var addNewLines = function(content)
-	{
-		var lines = content.split("\n");
-		var output = '';
-		var isInComment = false;
-		var hasSpecialOpening = false;
-		for(var i = 0; i < lines.length; i++) {
-			var line = lines[i];
-			var openingIndex = line.indexOf('/*');
-			var closingIndex = line.indexOf('*/');
-			var isBase64 = line.indexOf('url(') > -1;
-			if(openingIndex > -1) {
-				isInComment = true;
-			}
-			if(closingIndex > -1) {
-				isInComment = false;
-			}
-			// Leave single-line special comments alone
-			var special1 = line.indexOf('/*!');
-			var special2 = line.indexOf('/*#');
-			if(special1 > -1 || special2 > -1) {
-				isInComment = true;
-				hasSpecialOpening = true;
-			}
-			if(!isInComment && !hasSpecialOpening && !isBase64) {
-				line = line.replace(/;/g, ";\n");
-				line = line.replace(/,/g, ",\n");
-				line = line.replace(/\{/g, "\{\n");
-				line = line.replace(/\}/g, "\}\n");
-			}
-			if(!isInComment && hasSpecialOpening) {
-				hasSpecialOpening = false;
-			}
-			output += line + "\n";
-		}
-		return output;
-	};
-
-	var stripComments = function(content)
-	{
-		var lines = content.split("\n");
-		var output = '';
-		var isInComment = false;
-		var hasSpecialOpening = false;
-		for(var i = 0; i < lines.length; i++) {
-			var line = lines[i];
-			var openingIndex = line.indexOf('/*') > -1;
-			var closingIndex = line.indexOf('*/') > -1;
-			var special = line.indexOf('/*!') > -1;
-			if(!special) {
-				special = line.indexOf('/*#') > -1;
-			}
-			if(special) {
-				openingIndex = false;
-				hasSpecialOpening = true;
-			}
-
-			// Remove inline comments
-			if(openingIndex && closingIndex) {
-				line = line.substring(0, openingIndex);
-				line = line.substring(closingIndex + 2, line.length);
-			}
-
-			// Remove the first line of block comments
-			if(openingIndex) {
-				continue;
-			}
-
-			// If we're in a special-comment block and there's a closing comment, add it to the output and continue
-			if(hasSpecialOpening && closingIndex) {
-				output += line + "\n";
-				hasSpecialOpening = false;
-				continue;
-			}
-
-			// If there's a closing comment, remove that line
-			if(closingIndex) {
-				continue;
-			}
-
-			// Remove blank lines
-			if(!line.length || line == '') {
-				continue;
-			}
-
-			// Add the line to the output
-			output += line + "\n";
-		}
-		return output;
-	};
-
 	var spaceBlockComments = function(content)
 	{
-		var lines = content.split("\n");
-		var output = '';
-		for(var i = 0; i < lines.length; i++) {
-			var line = lines[i].trim();
-			var openingIndex = line.indexOf('/*') > -1;
-			var closingIndex = line.indexOf('*/') > -1;
+		var output = content.replace(/\/\*/g, "\n/*");
+		output = output.replace(/\*\//g, "*/\n");
+		return output;
+	};
 
-			// Add blank line before block comments
-			if(openingIndex && i != 0) {
-				var prevLine = lines[i - 1];
-				if(prevLine.length) {
-					line = "\n" + line;
-				}
-			}
-
-			// Add blank line after block comments
-			if(closingIndex) {
-				var nextLine = lines[i - 1];
-				if(nextLine.length) {
-					line = line + "\n";
-				}
-			}
-
-			output += line + "\n";
+	var getSourceMap = function(content)
+	{
+		var openingIndex = content.indexOf('/*#');
+		var hasSourceMap = openingIndex > -1;
+		if(!hasSourceMap) {
+			return '';
 		}
-
-		// Remove extraneous newline characters
-		return output.replace(/\n\n\n/g, "\n");
+		return content.substring(openingIndex, content.length).trim();
 	};
 
 	var configpath = path.normalize(path.join(__dirname, '/../defaults/.csscomb.json'));
 	var config = grunt.file.readJSON(configpath);
-	var comb = new Comb(config);
+	var comb;
+	if(!grunt.file.exists(configpath)) {
+		comb = new Comb('yandex');
+	} else {
+		comb = new Comb(config);
+	}
 
 	grunt.registerMultiTask('cleaner_css', 'Makes your clean CSS even cleaner', function() {
 
@@ -152,22 +52,31 @@ module.exports = function(grunt) {
 		this.files.forEach(function(file) {
 
 			var valid = file.src.filter(function(filepath) {
-				if (!grunt.file.exists(filepath)) {
+				if(!grunt.file.exists(filepath)) {
 					grunt.log.warn('Source file "' + filepath + '" not found.');
 					return false;
 				} else {
 					return true;
 				}
 			});
-			var minifiedContent = valid.map(function(filepath) {
+			var array = valid.map(function(filepath) {
+				if(grunt.file.isDir(filepath)) {
+					var array = [];
+					grunt.file.recurse(filepath, function(abspath, rootdir, subdir, filename) {
+						array.push(abspath);
+					});
+					return array;
+				} else {
+					return [filepath];
+				}
+			});
+			var minifiedContent = array.map(function(filepath) {
 				var filecontent = grunt.file.read(filepath);
-				filecontent = addNewLines(filecontent);
-				filecontent = stripComments(filecontent);
-				filecontent = spaceBlockComments(filecontent);
 				if(!filecontent.length) {
 					grunt.log.warn('No content in ' + path.basename(filepath));
 					return;
 				}
+				grunt.log.ok('Cleaning ' + path.basename(filepath));
 				return filecontent;
 			});
 			if(!minifiedContent.length) {
@@ -177,8 +86,18 @@ module.exports = function(grunt) {
 				minifiedContent += '';
 			}
 
-			var combedContent = comb.processString(minifiedContent);
-			grunt.file.write(file.dest, combedContent);
+			var srcmap = getSourceMap(minifiedContent);
+			minifiedContent = new CleanCSS({
+				keepBreaks: true
+			}).minify(minifiedContent).styles;
+
+			if(srcmap.length) {
+				minifiedContent += "\n" + srcmap;
+			}
+				
+			minifiedContent = comb.processString(minifiedContent);
+			minifiedContent = minifiedContent.replace(/,url/g, ",\n\t\t url");
+			grunt.file.write(file.dest, minifiedContent);
 		});
 	});
 

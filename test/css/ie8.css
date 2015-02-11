@@ -5,9 +5,13 @@
   width: 100%;
   float: none;
 }
+/*! Footer */
 .page-content-intro .main {
-  width: 100%;
-  float: none;
+   /* Footer */ width: 100%; /* Footer */
+  float: none; /* Footer */
+}
+.page-content-intro .main {
+  height: 100%;
 }
 .article-image a:before,
 .article-image a:after {
@@ -152,7 +156,7 @@
 .input-radio.checked.disabled {
   zoom: 1;
   filter: alpha(opacity=50);
-  -webkit-opacity: 0.5;
+  -webkit-opacity: 0.5; /* Footer */
   -moz-opacity: 0.5;
   opacity: 0.5;
 }

@@ -30,7 +30,7 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     cleaner_css: {
-      defaults: {
+      default: {
         options: {
         },
         files: {
@@ -41,6 +41,7 @@ module.exports = function(grunt) {
           'tmp/defaults/main.css': ['test/css/main.css'],
           'tmp/defaults/mejs.css': ['test/css/mejs.css'],
           'tmp/defaults/multiselect.css': ['test/css/multiselect.css']
+          // 'tmp/defaults/': ['test/css/'],
         }
       }
     },
@@ -62,7 +63,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'cleaner_css', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'cleaner_css']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
