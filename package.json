@@ -1,7 +1,7 @@
 {
   "name": "grunt-cleaner-css",
   "description": "Makes your clean CSS even cleaner",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "homepage": "https://github.com/nielse63/cleaner-css",
   "author": {
     "name": "Erik Nielsen",

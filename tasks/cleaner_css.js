@@ -86,6 +86,17 @@ module.exports = function(grunt) {
 				minifiedContent += '';
 			}
 
+			var contentArray = minifiedContent.split("\n");
+			var output = '';
+			for(var i = 0; i < contentArray.length; i++) {
+				var line = contentArray[i].trim();
+				if(line == ';' || line.indexOf('-lh-property') > -1) {
+					continue;
+				}
+				output += line + "\n";
+			}
+			minifiedContent = output;
+
 			var srcmap = getSourceMap(minifiedContent);
 			minifiedContent = new CleanCSS({
 				keepBreaks: true
