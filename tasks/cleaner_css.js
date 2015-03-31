@@ -9,8 +9,8 @@
 'use strict';
 
 var path = require('path');
-var Comb = require('csscomb');
-var CleanCSS = require('clean-css');
+// var Comb = require('csscomb');
+// var CleanCSS = require('clean-css');
 
 module.exports = function(grunt) {
 
@@ -32,19 +32,35 @@ module.exports = function(grunt) {
 	};
 
 	var configpath = path.normalize(path.join(__dirname, '/../defaults/.csscomb.json'));
-	var config = grunt.file.readJSON(configpath);
-	var comb;
-	if(!grunt.file.exists(configpath)) {
-		comb = new Comb('yandex');
-	} else {
-		comb = new Comb(config);
-	}
+	// var comb;
+	// if(!grunt.file.exists(configpath)) {
+	// 	comb = new Comb('yandex');
+	// } else {
+	// 	var config = grunt.file.readJSON(configpath);
+	// 	comb = new Comb(config);
+	// }
 
-	grunt.registerMultiTask('cleaner_css', 'Makes your clean CSS even cleaner', function() {
+	grunt.registerMultiTask('tmp_cleaner_css', 'Makes your clean CSS even cleaner', function() {
 
 		var options = this.options({
 			config: '.csscomb.json'
 		});
+
+		// Register dependent tasks
+		grunt.initConfig({
+			cssmin : {
+				combine: {
+					options : {
+						compatibility : '*',
+						keepBreaks : true,
+						keepSpecialComments : 0,
+						restructuring : false
+					},
+					files : this.files
+				}
+			},
+		});
+		grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 		var c = 0,
 			count = this.files.count;
@@ -70,7 +86,7 @@ module.exports = function(grunt) {
 					return [filepath];
 				}
 			});
-			var minifiedContent = array.map(function(filepath) {
+			var originalContent = array.map(function(filepath) {
 				var filecontent = grunt.file.read(filepath);
 				if(!filecontent.length) {
 					grunt.log.warn('No content in ' + path.basename(filepath));
@@ -79,37 +95,29 @@ module.exports = function(grunt) {
 				grunt.log.ok('Cleaning ' + path.basename(filepath));
 				return filecontent;
 			});
-			if(!minifiedContent.length) {
-				grunt.fail.warn('Minification failed');
+			if(!originalContent.length) {
+				// TODO: make sure this runs per file
+				grunt.fail.warn('Cleaning failed - no content in file.');
 			}
-			if(typeof minifiedContent != 'string') {
-				minifiedContent += '';
+			if(typeof originalContent != 'string') {
+				originalContent += '';
 			}
 
-			var contentArray = minifiedContent.split("\n");
+			var contentArray = originalContent.split("\n");
 			var output = '';
 			for(var i = 0; i < contentArray.length; i++) {
 				var line = contentArray[i].trim();
-				if(line == ';' || line.indexOf('-lh-property') > -1) {
+				if(line == ';' || line.indexOf('-lh-property') > -1 || line.indexOf('lesshat-selector') > -1) {
 					continue;
 				}
 				output += line + "\n";
 			}
-			minifiedContent = output;
+			var content = output;
 
-			var srcmap = getSourceMap(minifiedContent);
-			minifiedContent = new CleanCSS({
-				keepBreaks: true
-			}).minify(minifiedContent).styles;
-
-			if(srcmap.length) {
-				minifiedContent += "\n" + srcmap;
-			}
-				
-			minifiedContent = comb.processString(minifiedContent);
-			minifiedContent = minifiedContent.replace(/,url/g, ",\n\t\t url");
-			grunt.file.write(file.dest, minifiedContent);
+			grunt.file.write(file.dest, content);
 		});
+
+		/* Min -> Comb */
 	});
 
 };
