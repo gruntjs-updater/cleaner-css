@@ -9,8 +9,6 @@
 'use strict';
 
 var path = require('path');
-// var Comb = require('csscomb');
-// var CleanCSS = require('clean-css');
 
 module.exports = function(grunt) {
 
@@ -31,16 +29,7 @@ module.exports = function(grunt) {
 		return content.substring(openingIndex, content.length).trim();
 	};
 
-	var configpath = path.normalize(path.join(__dirname, '/../defaults/.csscomb.json'));
-	// var comb;
-	// if(!grunt.file.exists(configpath)) {
-	// 	comb = new Comb('yandex');
-	// } else {
-	// 	var config = grunt.file.readJSON(configpath);
-	// 	comb = new Comb(config);
-	// }
-
-	grunt.registerMultiTask('tmp_cleaner_css', 'Makes your clean CSS even cleaner', function() {
+	grunt.registerMultiTask('cleaner_css', 'Makes your clean CSS even cleaner', function() {
 
 		var options = this.options({
 			config: '.csscomb.json'
@@ -96,7 +85,6 @@ module.exports = function(grunt) {
 				return filecontent;
 			});
 			if(!originalContent.length) {
-				// TODO: make sure this runs per file
 				grunt.fail.warn('Cleaning failed - no content in file.');
 			}
 			if(typeof originalContent != 'string') {
@@ -116,8 +104,6 @@ module.exports = function(grunt) {
 
 			grunt.file.write(file.dest, content);
 		});
-
-		/* Min -> Comb */
 	});
 
 };
