@@ -31,29 +31,10 @@ module.exports = function(grunt) {
 
 	grunt.registerMultiTask('cleaner_css', 'Makes your clean CSS even cleaner', function() {
 
-		var options = this.options({
-			config: '.csscomb.json'
-		});
-
-		// Register dependent tasks
-		grunt.initConfig({
-			cssmin : {
-				combine: {
-					options : {
-						compatibility : '*',
-						keepBreaks : true,
-						keepSpecialComments : 0,
-						restructuring : false
-					},
-					files : this.files
-				}
-			},
-		});
-		grunt.loadNpmTasks('grunt-contrib-cssmin');
+		var options = this.options();
 
 		var c = 0,
 			count = this.files.count;
-		var comb_files = {};
 		this.files.forEach(function(file) {
 
 			var valid = file.src.filter(function(filepath) {
@@ -105,5 +86,4 @@ module.exports = function(grunt) {
 			grunt.file.write(file.dest, content);
 		});
 	});
-
 };
