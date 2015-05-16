@@ -40,6 +40,10 @@
     "gruntplugin"
   ],
   "dependencies": {
+    "chalk": "^1.0.0",
+    "clean-css": "^3.2.10",
+    "css": "^2.2.0",
+    "csscomb": "^3.0.4",
     "grunt-contrib-cssmin": "^0.12.1"
   }
 }

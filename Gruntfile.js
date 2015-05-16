@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 
 		// Before generating any new files, remove any previously-created files.
 		clean: {
-			tests: ['tmp/output']
+			tests: ['tmp/output/*']
 		},
 
 		// Configuration to be run (and then tested).
@@ -33,15 +33,17 @@ module.exports = function(grunt) {
 			default: {
 				options: {
 				},
-				files: {
-					// 'tmp/output/bootstrap.css': ['tmp/input/bootstrap.css'],
-					// 'tmp/output/ie8.css': ['tmp/input/ie8.css'],
-					'tmp/output/2.css': ['tmp/input/2.css'],
-					// 'tmp/output/jquery-ui.css': ['tmp/input/jquery-ui.css'],
-					// 'tmp/output/main.css': ['tmp/input/main.css'],
-					// 'tmp/output/mejs.css': ['tmp/input/mejs.css'],
-					// 'tmp/output/multiselect.css': ['tmp/input/multiselect.css']
-				}
+				// files: {
+				// 	'tmp/output/1.css': ['tmp/input/1.css'],
+				// }
+				files: [{
+					expand: true,
+					cwd: 'tmp/input',
+					src: ['*.css', '!_*.css'],
+					dest: 'tmp/output',
+					ext: '.css',
+					extDot : 'last'
+				}]
 			}
 		},
 

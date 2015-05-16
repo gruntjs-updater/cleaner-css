@@ -9,81 +9,102 @@
 'use strict';
 
 var path = require('path');
+var chalk = require('chalk');
+var CleanCSS = require('clean-css');
+var css = require('css');
+var Comb = require('csscomb');
 
 module.exports = function(grunt) {
 
-	var spaceBlockComments = function(content)
+	var getAvailableFiles = function (filesArray) {
+		return filesArray.filter(function (filepath) {
+			if (!grunt.file.exists(filepath)) {
+				grunt.log.warn('Source file ' + chalk.cyan(filepath) + ' not found');
+				return false;
+			} else {
+				return true;
+			}
+		});
+	};
+
+	var getContentArray = function(content)
 	{
-		var output = content.replace(/\/\*/g, "\n/*");
-		output = output.replace(/\*\//g, "*/\n");
+		var array = content.split("\n");
+		var output = [];
+		for(var i = 0; i < array.length; i++) {
+			var line = array[i];
+			output.push(line);
+		}
 		return output;
 	};
 
-	var getSourceMap = function(content)
-	{
-		var openingIndex = content.indexOf('/*#');
-		var hasSourceMap = openingIndex > -1;
-		if(!hasSourceMap) {
-			return '';
+	var parseLines = function(array) {
+		var output = '';
+		for(var i = 0; i < array.length; i++) {
+			var line = array[i];
+			if(line.trim() == ';' || line.trim().indexOf('/*# source') > -1) {
+				continue;
+			}
+			output += line + "\n";
 		}
-		return content.substring(openingIndex, content.length).trim();
+		return output;
+	};
+
+	var parseCSS = function(array) {
+		var output = [];
+		for(var i = 0; i < array.length; i++) {
+			var rule = array[i];
+			if(rule.selectors && rule.selectors.indexOf('lesshat-selector') > -1) {
+				continue;
+			}
+			output.push(rule);
+		}
+		return output;
 	};
 
 	grunt.registerMultiTask('cleaner_css', 'Makes your clean CSS even cleaner', function() {
 
-		var options = this.options();
+		var options = this.options({
+			min : {
+				keepBreaks : true,
+				mediaMerging : true
+			},
+			comb : {
+				config : path.resolve(path.join(process.cwd(), 'defaults', '.csscomb.json'))
+			}
+		});
 
-		var c = 0,
-			count = this.files.count;
+		// Overwrite `keepBreaks` cssmin option in case user inputs `false`
+		options.min.keepBreaks = true;
+		
+		var comb = new Comb(grunt.file.exists(options.comb.config) ? grunt.file.readJSON(options.comb.config) : 'yandex');
+
 		this.files.forEach(function(file) {
 
-			var valid = file.src.filter(function(filepath) {
-				if(!grunt.file.exists(filepath)) {
-					grunt.log.warn('Source file "' + filepath + '" not found.');
-					return false;
-				} else {
-					return true;
-				}
-			});
-			var array = valid.map(function(filepath) {
-				if(grunt.file.isDir(filepath)) {
-					var array = [];
-					grunt.file.recurse(filepath, function(abspath, rootdir, subdir, filename) {
-						array.push(abspath);
-					});
-					return array;
-				} else {
-					return [filepath];
-				}
-			});
-			var originalContent = array.map(function(filepath) {
-				var filecontent = grunt.file.read(filepath);
-				if(!filecontent.length) {
-					grunt.log.warn('No content in ' + path.basename(filepath));
-					return;
-				}
-				grunt.log.ok('Cleaning ' + path.basename(filepath));
-				return filecontent;
-			});
-			if(!originalContent.length) {
-				grunt.fail.warn('Cleaning failed - no content in file.');
-			}
-			if(typeof originalContent != 'string') {
-				originalContent += '';
-			}
+			var files = getAvailableFiles(file.src);
+			for(var i = 0; i < files.length; i++) {
 
-			var contentArray = originalContent.split("\n");
-			var output = '';
-			for(var i = 0; i < contentArray.length; i++) {
-				var line = contentArray[i].trim();
-				if(line == ';' || line.indexOf('-lh-property') > -1 || line.indexOf('lesshat-selector') > -1) {
-					continue;
-				}
-				output += line + "\n";
-			}
-			var content = output;
+				grunt.log.ok('Cleaning file ' + path.basename(files[i]));
 
-			grunt.file.write(file.dest, content);
+				// Get initial content
+				var thisFile = path.resolve(files[i]);
+				var contentString = grunt.file.read(thisFile);
+				var contentArray = getContentArray(contentString);
+				var content = parseLines(contentArray);
+
+				// Parse & write CSS
+				var cssContent = css.parse(content, thisFile);
+				cssContent.stylesheet.rules = parseCSS(cssContent.stylesheet.rules);
+
+				// Minify
+				content = css.stringify(cssContent);
+				var minifiedCSS = new CleanCSS(options.min).minify(content);
+
+				// Comb
+				var syntax = thisFile.split('.').pop();
+				var combed = comb.processString(minifiedCSS.styles, { syntax : syntax });
+				grunt.file.write(file.dest, combed);
+			}
 		});
 	});
 };
