@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 	var parseLines = function(array) {
 		var output = '';
 		for(var i = 0; i < array.length; i++) {
-			var line = array[i];
+			var line = array[i].replace('};', '}');
 			if(line.trim() == ';' || line.trim().indexOf('/*# source') > -1) {
 				continue;
 			}
@@ -94,6 +94,7 @@ module.exports = function(grunt) {
 
 				// Parse & write CSS
 				var cssContent = css.parse(content, thisFile);
+
 				cssContent.stylesheet.rules = parseCSS(cssContent.stylesheet.rules);
 
 				// Minify
